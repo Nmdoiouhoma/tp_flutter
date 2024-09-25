@@ -1,3 +1,5 @@
+import 'package:exo2/components.dart';
+import 'package:exo2/consts.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,8 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-      ),
+      theme: ThemeData(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -22,7 +23,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-
   final String title;
 
   @override
@@ -30,69 +30,115 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _name = '';
+  final _formKey = GlobalKey<FormState>();
+  late double _data1;
+  late double _data2;
 
+  _operandValidator(value) {
+    if (value == null ||
+        value.trim().isEmpty ||
+        double.tryParse(value) == null) {
+      return 'Veuillez saisir votre nombre';
+    }
+    return null;
+  }
+
+  _displayResult(String operation) {}
+
+  _add() {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState?.save();
+    _displayResult('$_data1 + $_data2 = ${_data1 + _data2}');
+  }
+
+  _sub() {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState?.save();
+    _displayResult('$_data1 - $_data2 = ${_data1 - _data2}');
+  }
+
+  _mul() {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState?.save();
+    _displayResult('$_data1 * $_data2 = ${_data1 * _data2}');
+  }
+
+  _div() {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState?.save();
+    _displayResult('$_data1  $_data2 / ${_data1 / _data2}');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-
-          title: Text(widget.title)
-      ),
-
+      appBar: AppBar(title: Text(widget.title)),
       body: Form(
-        child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                Padding(
-                  padding: null,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SizedBox(
+                  width: 200,
                   child: TextFormField(
-
-                    decoration: const InputDecoration(labelText: 'Votre nom'),
-                    onSaved: (value) => _name = value ?? '',
+                    autofocus: true,
+                    keyboardType: TextInputType.number,
+                    style: defaultTextStyle,
+                    onSaved: (value) => _data1,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Veuillez entrer un nom';
+                        return 'Saisir votre operation !';
                       }
                       return null;
                     },
                   ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: [],
-                        child: Text('Dire Bonjour'),
-                      ),
-                    ),
-
-
                 ),
-
-
-                Padding(
-                  padding: null,
+                SizedBox(
+                  width: 200,
                   child: TextFormField(
-
-                    decoration: const InputDecoration(labelText: 'Votre nom'),
-                    onSaved: (value) => _name = value ?? '',
+                    autofocus: true,
+                    keyboardType: TextInputType.number,
+                    style: defaultTextStyle,
+                    onSaved: (value) => _data1,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Veuillez entrer un nom';
+                        return 'Saisir votre operation !';
                       }
                       return null;
                     },
                   ),
-
                 ),
-                ],
-
-              ),
-            ],
-
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    MySizedBox(
+                        child: ElevatedButton(
+                      onPressed: () => _add,
+                      child: MyText('+'),
+                    )),
+                    MySizedBox(
+                        child: ElevatedButton(
+                      onPressed: () => _sub,
+                      child: MyText('-'),
+                    )),
+                    MySizedBox(
+                        child: ElevatedButton(
+                      onPressed: () => _div,
+                      child: MyText('/'),
+                    )),
+                    MySizedBox(
+                        child: ElevatedButton(
+                      onPressed: () => _mul,
+                      child: MyText('*'),
+                    )),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
-
+}

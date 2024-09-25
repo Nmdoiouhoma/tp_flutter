@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:exo2/consts.dart';
 
-// Composant MyPadding qui applique le padding par défaut
-class MyPadding extends StatelessWidget {
-  final Widget child;
-  const MyPadding({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(defaultPadding),
-      child: child,
-    );
-  }
+class MyPadding extends Padding {
+  const MyPadding({super.key, required super.child}): super(padding: defaultPadding);
 }
 
-// Composant MyText qui applique le style de texte par défaut
-class MyText extends StatelessWidget {
-  final String data;
-  const MyText(this.data, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(data, style: defaultTextStyle);
-  }
+class MyText extends Text {
+  const MyText(super.data, {super.key}): super(style: defaultTextStyle);
 }
+
+String? stringNotEmptyValidator (value, message) {
+  if (value == null || value.trim().isEmpty) {
+    return message;
+  }
+  return null;
+}
+
+class MySizedBox extends SizedBox{
+  const MySizedBox({super.key, required super.child}): super(width: 100);
+
+}
+
+
