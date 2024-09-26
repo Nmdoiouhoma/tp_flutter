@@ -2,23 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:exo2/consts.dart';
 
 class MyPadding extends Padding {
-  const MyPadding({super.key, required super.child}): super(padding: defaultPadding);
+  const MyPadding({super.key, required super.child})
+      : super(padding: defaultPadding);
 }
 
 class MyText extends Text {
-  const MyText(super.data, {super.key}): super(style: defaultTextStyle);
+  const MyText(super.data, {super.key}) : super(style: defaultTextStyle);
 }
 
-String? stringNotEmptyValidator (value, message) {
-  if (value == null || value.trim().isEmpty) {
-    return message;
-  }
-  return null;
+class MySizedBox extends SizedBox {
+  const MySizedBox({super.key, required super.child}) : super(width: 100);
 }
-
-class MySizedBox extends SizedBox{
-  const MySizedBox({super.key, required super.child}): super(width: 100);
-
-}
-
-
