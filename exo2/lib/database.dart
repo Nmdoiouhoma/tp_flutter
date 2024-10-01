@@ -11,7 +11,7 @@ class historyDatabase {
   late final Database database;
 
   _onCreate(Database db, int version) async{
-    await db.execute('Create Table entry (id INTEGER PRIMARY KEY AUTOINCREMENT), name TEXT, date INT)');
+    await db.execute('Create Table entry (id INTEGER PRIMARY KEY AUTOINCREMENT), name TEXT, date INTEGER)');
   }
 
   open() async{
