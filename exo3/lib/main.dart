@@ -1,16 +1,17 @@
+import 'package:exo3/components.dart';
 import 'package:exo3/consts.dart';
+import 'package:exo3/page/breed.dart';
 import 'package:exo3/services/catapi.dart';
 import 'package:flutter/material.dart';
 import 'package:exo3/models/breed.dart';
 
-void main() async {
+void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -50,25 +51,71 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(title: Text(widget.title)),
       body: Form(
         key: _formKey,
-        child: Column(children: [
-          Expanded(
-            child: FutureBuilder(
+        child: Column(
+          children: [
+              Expanded(
+              child: FutureBuilder<List<Breed>>(
                 future: _breeds,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Erreur: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(
+                        child: Text('Aucune donnée disponible'));
+                  } else {
                     final data = snapshot.data!;
                     return ListView.builder(
-                        padding: defaultPadding,
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          breed:
-                          data[index];
-                        });
+                      padding: defaultPadding,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final breed = data[index];
+                        return Card(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MyBreedPage(
+                                    breed), // Passer l'objet Breed ici
+                              ));
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                MyPadding(child: MyText(breed.name)),
+                                if (breed.image != null)
+                                  Padding(
+                                    padding: defaultPaddingAll,
+                                    child: Image.network(
+                                      breed.image!.url,
+                                      alignment: Alignment.center,
+                                      fit: BoxFit.fill,
+                                      loadingBuilder:
+                                          (context, child, progress) {
+                                        if (progress == null) {
+                                          return child;
+                                        }
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      },
+                                    ),
+                                  ),
+                                MyPadding(
+                                  child: MyText(breed.description ??
+                                      'Pas de description'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   }
-                  return const Center(child: CircularProgressIndicator());
-                }),
-          ),
-        ]),
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

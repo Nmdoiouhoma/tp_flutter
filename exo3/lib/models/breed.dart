@@ -2,24 +2,30 @@ import 'package:exo3/models/image.dart';
 
 class Breed {
   late String id;
-  late String nom;
-  late String description;
-  Image? image;
+  late String name;
+  late String? description;
+  late Image? image;
 
-  Breed(this.description, this.id, this.nom);
+  Breed(this.description, this.id);
 
   Breed.fromMap(Map<String, dynamic> json) {
     id = json['id'];
-    nom = json['nom'];
+    name = json['name'];
     description = json['description'];
+    // Vérifier si 'image' est non null avant de créer une instance de Image
+    image = json['image'] != null ? Image.fromMap(json['image']) : null;
   }
 
-  Map<String, dynamic> toMap() =>
-      {'id': id, 'nom': nom, 'description': description};
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'nom': name,
+        'description': description,
+        'image': image != null ? {'id': image!.id, 'url': image!.url} : null
+      };
 
   @override
   String toString() {
-    return nom;
+    return name;
   }
 
   @override
